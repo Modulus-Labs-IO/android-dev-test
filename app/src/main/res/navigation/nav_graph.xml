@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/pokemonFragment">
+
+    <!-- Pokemon List Fragment -->
+    <fragment
+        android:id="@+id/pokemonFragment"
+        android:name="com.moduluslabs.pokemon.presentation.ui.PokemonFragment"
+        android:label="Poke API"
+        tools:layout="@layout/fragment_pokemon" >
+        <action
+            android:id="@+id/action_pokemonListFragment_to_pokemonDetailsFragment"
+            app:destination="@id/pokemonDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pokemonDetailsFragment"
+        android:name="com.moduluslabs.pokemon.presentation.ui.PokemonDetailsFragment"
+        android:label="Pokemon Details"
+        tools:layout="@layout/fragment_pokemon_details" >
+        <argument
+            android:name="selected_poke"
+            app:argType="com.moduluslabs.pokemon.domain.model.PokeResult" />
+    </fragment>
+
+    <!-- Add more fragments here as needed -->
+</navigation>
