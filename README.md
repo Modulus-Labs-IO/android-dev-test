@@ -51,7 +51,8 @@ You need to build a Pokémon App with the following features:
    git push origin feature/APPLICANT_NAME/pokemon-app
    ```
 2. **Create a pull request** to your forked repository’s `main` branch.
-3. **Submit the PR link** for review.
+3. **Add pull request descriptions and attach the screenshot of passed unit tests, as well as the video recording of the working application.**
+4. **Submit the PR link** for review.
 
 ## Bonus Features
 - Pagination for loading more Pokémon
