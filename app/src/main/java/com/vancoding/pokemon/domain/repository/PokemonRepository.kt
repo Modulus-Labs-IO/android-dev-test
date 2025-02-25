@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface PokemonRepository {
     suspend fun getPokemonList(limit: Int, offset: Int): Flow<NetworkResultState<List<Pokemon>>>
     suspend fun getPokemonDetails(id: Int): Flow<NetworkResultState<PokemonDetails>>
+    suspend fun searchPokemon(query: String): Flow<NetworkResultState<List<Pokemon>>>
 }
