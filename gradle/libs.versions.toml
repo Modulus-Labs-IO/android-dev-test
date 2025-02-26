@@ -13,6 +13,7 @@ hilt = "2.50"
 ksp = "2.0.21-1.0.27"
 navigation = "2.8.7"
 mockk = "1.13.7"
+coroutinesTest = "1.7.3"
 
 # Library versions
 retrofit = "2.11.0"
@@ -30,6 +31,9 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+#test coroutine
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 
 #Mockk
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }

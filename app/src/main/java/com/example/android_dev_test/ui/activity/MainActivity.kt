@@ -1,8 +1,9 @@
-package com.example.android_dev_test
+package com.example.android_dev_test.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import com.example.android_dev_test.R
 import com.example.android_dev_test.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 

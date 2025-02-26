@@ -1,4 +1,4 @@
-package com.example.android_dev_test.ui
+package com.example.android_dev_test.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android_dev_test.databinding.FragmentPokemonListBinding
+import com.example.android_dev_test.ui.PokemonListState
 import com.example.android_dev_test.ui.adapter.PokemonListAdapter
 import com.example.android_dev_test.ui.viewmodel.PokemonViewModel
 import dagger.hilt.android.AndroidEntryPoint

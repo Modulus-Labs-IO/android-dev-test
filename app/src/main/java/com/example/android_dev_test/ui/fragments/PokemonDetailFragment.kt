@@ -1,4 +1,4 @@
-package com.example.android_dev_test.ui
+package com.example.android_dev_test.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,7 @@ import coil.load
 import com.example.android_dev_test.R
 import com.example.android_dev_test.data.model.PokemonDetailsResponse
 import com.example.android_dev_test.databinding.FragmentPokemonDetailBinding
+import com.example.android_dev_test.ui.PokemonDetailsState
 import com.example.android_dev_test.ui.viewmodel.PokemonViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
