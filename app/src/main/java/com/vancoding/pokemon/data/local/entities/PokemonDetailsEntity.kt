@@ -19,7 +19,7 @@ data class PokemonDetailsEntity(
     val stats: String,
     val lastUpdated: Long = System.currentTimeMillis(),
 ) {
-    fun toDomain(): PokemonDetails {
+    fun toPokemonDetailsDomain(): PokemonDetails {
         return PokemonDetails(
             id = id,
             name = name,
@@ -37,7 +37,7 @@ data class PokemonDetailsEntity(
     }
 
     companion object {
-        fun fromDomain(domain: PokemonDetails): PokemonDetailsEntity {
+        fun fromPokemonDetailsDomain(domain: PokemonDetails): PokemonDetailsEntity {
             return PokemonDetailsEntity(
                 id = domain.id,
                 name = domain.name,

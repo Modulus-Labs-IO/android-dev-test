@@ -57,7 +57,7 @@ class PokemonRepositoryImpl @Inject constructor(
         val needsUpdate = localData == null || (System.currentTimeMillis() - localData.lastUpdated > ONE_DAY_IN_MS)
 
         if (localData != null) {
-            emit(NetworkResultState.Success(localData.toDomain()))
+            emit(NetworkResultState.Success(localData.toPokemonDetailsDomain()))
         }
 
         if (needsUpdate) { // Fetch only if the data is outdated
@@ -66,7 +66,7 @@ class PokemonRepositoryImpl @Inject constructor(
                 if (response.isSuccessful) {
                     response.body()?.let { apiResponse ->
                         val pokemonDetails = apiResponse.toDomain()
-                        database.pokemonDetailsDao().insertPokemonDetails(PokemonDetailsEntity.fromDomain(pokemonDetails))
+                        database.pokemonDetailsDao().insertPokemonDetails(PokemonDetailsEntity.fromPokemonDetailsDomain(pokemonDetails))
                         emit(NetworkResultState.Success(pokemonDetails))
                     } ?: emit(NetworkResultState.Failure(ERROR_RESPONSE_BODY_NULL))
                 } else if (localData == null) {
