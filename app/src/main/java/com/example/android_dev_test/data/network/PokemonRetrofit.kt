@@ -9,12 +9,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 object PokemonRetrofit {
     private const val BASE_URL = "https://pokeapi.co/api/v2/"
 
-    // logging interceptor to log network requests
+    // Create a logging interceptor to log network requests
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
-    // OkHttpClient with the logging interceptor
+    // Create an OkHttpClient with the logging interceptor
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .build()
@@ -26,7 +26,7 @@ object PokemonRetrofit {
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
         .build()
 
-    //  ApiService instance
+    // Create the PokemonService instance
     val pokemonApiService: ApiService by lazy {
         retrofit.create(ApiService::class.java)
     }

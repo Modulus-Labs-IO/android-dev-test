@@ -12,13 +12,14 @@ constraintlayout = "2.2.0"
 hilt = "2.50"
 ksp = "2.0.21-1.0.27"
 navigation = "2.8.7"
+mockk = "1.13.7"
 
 # Library versions
 retrofit = "2.11.0"
 okhttp = "4.12.0"
 coroutines = "1.9.0"
 coil = "2.4.0" # Image loading
-room = "2.6.1" # Optional for local caching
+room = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -29,6 +30,10 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+#Mockk
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 
 #coil
 coil = { group = "io.coil-kt", name = "coil", version.ref = "coil" }

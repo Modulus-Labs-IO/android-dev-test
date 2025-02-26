@@ -52,6 +52,10 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // Mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+
     // UI
     implementation(libs.material)
     implementation(libs.coil)
