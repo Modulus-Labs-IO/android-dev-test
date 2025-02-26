@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Pokemon"
 include(":app")
-include(":core")
