@@ -16,7 +16,7 @@ interface PokemonDao {
     @Query("SELECT * FROM pokemon_table ORDER BY id ASC LIMIT :limit OFFSET :offset")
     fun getPokemonList(limit: Int, offset: Int): Flow<List<PokemonEntity>>
 
-    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%'")
+    @Query("SELECT * FROM pokemon_table WHERE LOWER(name) LIKE '%' || LOWER(:query) || '%'")
     fun searchPokemon(query: String): Flow<List<PokemonEntity>>
 
     @Query("DELETE FROM pokemon_table")

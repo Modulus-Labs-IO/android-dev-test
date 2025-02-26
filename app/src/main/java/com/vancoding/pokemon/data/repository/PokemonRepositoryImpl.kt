@@ -3,108 +3,125 @@ package com.vancoding.pokemon.data.repository
 import com.vancoding.pokemon.data.local.PokemonDatabase
 import com.vancoding.pokemon.data.local.entities.PokemonDetailsEntity
 import com.vancoding.pokemon.data.local.entities.PokemonEntity
+import com.vancoding.pokemon.data.mappers.toDomain
 import com.vancoding.pokemon.data.remote.api.PokeApiService
-import com.vancoding.pokemon.data.remote.response.PokemonDetailsResponse
-import com.vancoding.pokemon.data.remote.response.PokemonListResponse
 import com.vancoding.pokemon.domain.model.PokemonDetails
 import com.vancoding.pokemon.domain.repository.PokemonRepository
 import com.vancoding.pokemon.domain.model.Pokemon
+import com.vancoding.pokemon.utils.Constants.ERROR_RESPONSE_BODY_NULL
+import com.vancoding.pokemon.utils.Constants.ERROR_UNKNOWN
+import com.vancoding.pokemon.utils.Constants.ONE_DAY_IN_MS
+import com.vancoding.pokemon.utils.Constants.POKEMON_LIST_LIMIT
 import com.vancoding.pokemon.utils.NetworkResultState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class PokemonRepositoryImpl @Inject constructor(
     private val api: PokeApiService,
     private val database: PokemonDatabase,
-): PokemonRepository {
+) : PokemonRepository {
 
     override suspend fun getPokemonList(limit: Int, offset: Int): Flow<NetworkResultState<List<Pokemon>>> = flow {
-        database.pokemonDao().getPokemonList(limit, offset)
-            .map { entities -> entities.map { it.toPokemon() } }
-            .collect { pokemonList ->
-                if (pokemonList.isNotEmpty()) {
-                    emit(NetworkResultState.Success(pokemonList))
-                }
-            }
+        emit(NetworkResultState.Loading())
+
+        val localData = fetchPokemonListFromDatabase(limit, offset)
+        if (localData.isNotEmpty()) {
+            emit(NetworkResultState.Success(localData))
+        }
 
         try {
-            val response = api.getPokemonList(limit, offset)
-            if (response.isSuccessful) {
-                response.body()?.let { apiResponse ->
-                    val pokemonList = apiResponse.mapToDomain()
-                    database.pokemonDao()
-                        .insertPokemonList(pokemonList.map { PokemonEntity.fromDomain(it) })
-                    emit(NetworkResultState.Success(pokemonList))
-                } ?: emit(NetworkResultState.Failure("Response body is null"))
-            } else {
-                emit(NetworkResultState.Failure(response.message()))
+            val remoteData = fetchPokemonListFromApi(limit, offset)
+            database.pokemonDao().insertPokemonList(remoteData.map { PokemonEntity.fromDomain(it) })
+
+            if (remoteData != localData) {
+                emit(NetworkResultState.Success(remoteData))
             }
         } catch (e: Exception) {
-            emit(NetworkResultState.Failure(e.message ?: "Unknown error occurred"))
+            if (localData.isEmpty()) {
+                emit(NetworkResultState.Failure(e.message ?: ERROR_UNKNOWN))
+            }
         }
-    }.onStart { emit(NetworkResultState.Loading()) }
-        .catch { emit(NetworkResultState.Failure(it.message ?: "Unknown error occurred")) }
+    }.distinctUntilChanged()
 
     override suspend fun getPokemonDetails(id: Int): Flow<NetworkResultState<PokemonDetails>> = flow {
-        database.pokemonDetailsDao().getPokemonDetails(id)
-            .collect { pokemonDetails ->
-                pokemonDetails?.let {
-                    emit(NetworkResultState.Success(it.toDomain()))
+        emit(NetworkResultState.Loading())
+
+        val localData = database.pokemonDetailsDao().getPokemonDetails(id).firstOrNull()
+
+        // Checking the stored data is older than 24 hours
+        val needsUpdate = localData == null || (System.currentTimeMillis() - localData.lastUpdated > ONE_DAY_IN_MS)
+
+        if (localData != null) {
+            emit(NetworkResultState.Success(localData.toDomain()))
+        }
+
+        if (needsUpdate) { // Fetch only if the data is outdated
+            try {
+                val response = api.getPokemonDetails(id)
+                if (response.isSuccessful) {
+                    response.body()?.let { apiResponse ->
+                        val pokemonDetails = apiResponse.toDomain()
+                        database.pokemonDetailsDao().insertPokemonDetails(PokemonDetailsEntity.fromDomain(pokemonDetails))
+                        emit(NetworkResultState.Success(pokemonDetails))
+                    } ?: emit(NetworkResultState.Failure(ERROR_RESPONSE_BODY_NULL))
+                } else if (localData == null) {
+                    emit(NetworkResultState.Failure(response.message()))
+                }
+            } catch (e: Exception) {
+                if (localData == null) {
+                    emit(NetworkResultState.Failure(e.message ?: ERROR_UNKNOWN))
                 }
             }
-
-        try {
-            val response = api.getPokemonDetails(id)
-            if (response.isSuccessful) {
-                response.body()?.let { apiResponse ->
-                    val pokemonDetails = apiResponse.mapToDomain()
-                    database.pokemonDetailsDao().insertPokemonDetails(PokemonDetailsEntity.fromDomain(pokemonDetails))
-                    emit(NetworkResultState.Success(pokemonDetails))
-                } ?: emit(NetworkResultState.Failure("Response body is null"))
-            } else {
-                emit(NetworkResultState.Failure(response.message()))
-            }
-        } catch (e: Exception) {
-            emit(NetworkResultState.Failure(e.message ?: "Unknown error occurred"))
         }
-    }.onStart { emit(NetworkResultState.Loading()) }
-        .catch { emit(NetworkResultState.Failure(it.message ?: "Unknown error occurred")) }
+    }.catch { e ->
+        emit(NetworkResultState.Failure(e.message ?: ERROR_UNKNOWN))
+    }
 
     override suspend fun searchPokemon(query: String): Flow<NetworkResultState<List<Pokemon>>> = flow {
         emit(NetworkResultState.Loading())
 
-        database.pokemonDao().searchPokemon(query)
+        val localData = database.pokemonDao().searchPokemon(query)
             .map { entities -> entities.map { it.toPokemon() } }
-            .collect { localData ->
-                emit(NetworkResultState.Success(localData))
-            }
-    }.catch { emit(NetworkResultState.Failure(it.message ?: "Unknown error occurred")) }
+            .firstOrNull() ?: emptyList()
 
-    private fun PokemonListResponse.mapToDomain(): List<Pokemon> {
-        return this.results.map {
-            Pokemon(
-                id = it.url.substringAfter("pokemon/").substringBefore("/").toInt(),
-                name = it.name,
-                url = it.url,
-            )
+        if (localData.isNotEmpty()) {
+            emit(NetworkResultState.Success(localData))
+            return@flow
+        }
+
+        try {
+            val remoteData = fetchPokemonListFromApi(POKEMON_LIST_LIMIT, 0)
+            database.pokemonDao().insertPokemonList(remoteData.map { PokemonEntity.fromDomain(it) })
+
+            val updatedResults = database.pokemonDao().searchPokemon(query)
+                .map { entities -> entities.map { it.toPokemon() } }
+                .firstOrNull() ?: emptyList()
+
+            emit(NetworkResultState.Success(updatedResults))
+        } catch (e: Exception) {
+            emit(NetworkResultState.Failure(e.message ?: ERROR_UNKNOWN))
+        }
+    }.catch { e ->
+        emit(NetworkResultState.Failure(e.message ?: ERROR_UNKNOWN))
+    }
+
+    private suspend fun fetchPokemonListFromApi(limit: Int, offset: Int): List<Pokemon> {
+        val response = api.getPokemonList(limit, offset)
+        return if (response.isSuccessful) {
+            response.body()?.toDomain() ?: throw Exception(ERROR_RESPONSE_BODY_NULL)
+        } else {
+            throw Exception(response.message())
         }
     }
 
-    private fun PokemonDetailsResponse.mapToDomain(): PokemonDetails {
-        return PokemonDetails(
-            id = this.id,
-            name = this.name,
-            height = this.height,
-            weight = this.weight,
-            imageUrl = this.sprites.front_default ?: "",
-            types = this.types.map { it.type.name },
-            abilities = this.abilities.map { it.ability.name },
-            baseExperience = this.base_experience,
-            stats = this.stats.associate { it.stat.name to it.base_stat },
-        )
+    private suspend fun fetchPokemonListFromDatabase(limit: Int, offset: Int): List<Pokemon> {
+        return database.pokemonDao().getPokemonList(limit, offset)
+            .map { entities -> entities.map { it.toPokemon() } }
+            .firstOrNull() ?: emptyList()
     }
 }

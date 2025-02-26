@@ -3,6 +3,7 @@ package com.vancoding.pokemon.di
 import android.content.Context
 import androidx.room.Room
 import com.vancoding.pokemon.data.local.PokemonDatabase
+import com.vancoding.pokemon.utils.Constants.POKEMON_DATABASE_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             PokemonDatabase::class.java,
-            "pokemon_database"
+            POKEMON_DATABASE_NAME,
         ).build()
     }
 }

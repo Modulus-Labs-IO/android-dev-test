@@ -3,10 +3,11 @@ package com.vancoding.pokemon.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vancoding.pokemon.domain.model.Pokemon
+import com.vancoding.pokemon.utils.Constants.POKEMON_TABLE_NAME
 
-@Entity(tableName = "pokemon_table")
+@Entity(tableName = POKEMON_TABLE_NAME)
 data class PokemonEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int = 0,
     val name: String,
     val url: String,

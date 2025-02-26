@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.vancoding.pokemon"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.vancoding.pokemon"
@@ -36,6 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -45,7 +48,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.swiperefreshlayout)
+    implementation(libs.androidx.navigation.ui.ktx)
+    testImplementation(libs.androidx.core.testing)
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -66,7 +76,6 @@ dependencies {
     // Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    // Coil
-    implementation(libs.coil)
-    implementation(libs.coil.network.okhttp)
+    // Glide
+    implementation(libs.glide)
 }

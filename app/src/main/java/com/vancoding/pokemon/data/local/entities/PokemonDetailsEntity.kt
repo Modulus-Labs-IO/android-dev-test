@@ -3,10 +3,11 @@ package com.vancoding.pokemon.data.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.vancoding.pokemon.domain.model.PokemonDetails
+import com.vancoding.pokemon.utils.Constants.POKEMON_DETAIL_TABLE_NAME
 
-@Entity(tableName = "pokemon_details")
+@Entity(tableName = POKEMON_DETAIL_TABLE_NAME)
 data class PokemonDetailsEntity(
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     val id: Int = 0,
     val name: String,
     val height: Int,
@@ -16,6 +17,7 @@ data class PokemonDetailsEntity(
     val abilities: String,
     val baseExperience: Int,
     val stats: String,
+    val lastUpdated: Long = System.currentTimeMillis(),
 ) {
     fun toDomain(): PokemonDetails {
         return PokemonDetails(
@@ -30,7 +32,7 @@ data class PokemonDetailsEntity(
             stats = stats.split(",").associate {
                 val keyValue = it.split(":")
                 keyValue[0] to keyValue[1].toInt()
-            }
+            },
         )
     }
 
@@ -45,7 +47,8 @@ data class PokemonDetailsEntity(
                 types = domain.types.joinToString(","),
                 abilities = domain.abilities.joinToString(","),
                 baseExperience = domain.baseExperience,
-                stats = domain.stats.entries.joinToString(",") { "${it.key}:${it.value}" }
+                stats = domain.stats.entries.joinToString(",") { "${it.key}:${it.value}" },
+                lastUpdated = System.currentTimeMillis(),
             )
         }
     }

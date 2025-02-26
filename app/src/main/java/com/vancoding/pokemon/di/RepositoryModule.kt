@@ -1,5 +1,6 @@
 package com.vancoding.pokemon.di
 
+import com.vancoding.pokemon.data.local.PokemonDatabase
 import com.vancoding.pokemon.data.remote.api.PokeApiService
 import com.vancoding.pokemon.data.repository.PokemonRepositoryImpl
 import com.vancoding.pokemon.domain.repository.PokemonRepository
@@ -15,7 +16,10 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun providePokemonRepository(api: PokeApiService): PokemonRepository {
-        return PokemonRepositoryImpl(api)
+    fun providePokemonRepository(
+        api: PokeApiService,
+        database: PokemonDatabase,
+    ): PokemonRepository {
+        return PokemonRepositoryImpl(api, database)
     }
 }

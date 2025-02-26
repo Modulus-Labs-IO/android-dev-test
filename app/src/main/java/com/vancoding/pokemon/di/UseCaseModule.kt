@@ -33,8 +33,8 @@ object UseCaseModule {
     @Provides
     @Singleton
     fun provideSearchPokemonUseCase(
-        getPokemonListUseCase: GetPokemonListUseCase,
+        pokemonRepository: PokemonRepository,
     ): SearchPokemonUseCase {
-        return SearchPokemonUseCase(getPokemonListUseCase)
+        return SearchPokemonUseCase(pokemonRepository)
     }
 }

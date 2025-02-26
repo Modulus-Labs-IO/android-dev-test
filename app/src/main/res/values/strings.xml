@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Pokemon</string>
+    <string name="pokeball_icon">Pokeball Icon</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="search_pokemon">Search Pokémon...</string>
+    <string name="app_icon">App Icon</string>
+    <string name="abilities">Abilities</string>
+    <string name="base_stats">Base Stats</string>
+    <string name="physical_attributes">Physical Attributes</string>
+    <string name="height">Height:</string>
+    <string name="weight">Weight:</string>
+    <string name="base_experience">Base Experience:</string>
+    <string name="pokemon_image">Pokemon Image</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="pokemon_id">#%1$s</string>
+    <string name="pokemon_height_format">Height: %.1f m</string>
+    <string name="pokemon_weight_format">Weight: %.1f kg</string>
+    <string name="stat_value_format">%d</string>
+    <string name="no_pokemon_found">No Pokémon found</string>"
 </resources>
