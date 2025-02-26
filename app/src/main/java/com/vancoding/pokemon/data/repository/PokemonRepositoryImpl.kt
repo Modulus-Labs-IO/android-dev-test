@@ -87,7 +87,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
         val localData = database.pokemonDao().searchPokemon(query)
             .map { entities -> entities.map { it.toDomainModel() } }
-            .firstOrNull() ?: emptyList()
+            .firstOrNull().orEmpty()
 
         if (localData.isNotEmpty()) {
             emit(NetworkResultState.Success(localData))
@@ -100,7 +100,7 @@ class PokemonRepositoryImpl @Inject constructor(
 
             val updatedResults = database.pokemonDao().searchPokemon(query)
                 .map { entities -> entities.map { it.toDomainModel() } }
-                .firstOrNull() ?: emptyList()
+                .firstOrNull().orEmpty()
 
             emit(NetworkResultState.Success(updatedResults))
         } catch (e: Exception) {
@@ -122,6 +122,6 @@ class PokemonRepositoryImpl @Inject constructor(
     private suspend fun fetchPokemonListFromDatabase(limit: Int, offset: Int): List<Pokemon> {
         return database.pokemonDao().getPokemonList(limit, offset)
             .map { entities -> entities.map { it.toDomainModel() } }
-            .firstOrNull() ?: emptyList()
+            .firstOrNull().orEmpty()
     }
 }
