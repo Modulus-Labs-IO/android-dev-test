@@ -21,7 +21,7 @@ fun PokemonDetailsResponse.toDomain(): PokemonDetails {
         name = this.name,
         height = this.height,
         weight = this.weight,
-        imageUrl = this.sprites.front_default ?: "",
+        imageUrl = this.sprites.front_default.orEmpty(),
         types = this.types.map { it.type.name },
         abilities = this.abilities.map { it.ability.name },
         baseExperience = this.base_experience,
