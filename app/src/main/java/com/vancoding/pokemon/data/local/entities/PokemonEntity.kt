@@ -12,7 +12,7 @@ data class PokemonEntity(
     val name: String,
     val url: String,
 ) {
-    fun toPokemon(): Pokemon {
+    fun toDomainModel(): Pokemon {
         return Pokemon(
             id = id,
             name = name,
