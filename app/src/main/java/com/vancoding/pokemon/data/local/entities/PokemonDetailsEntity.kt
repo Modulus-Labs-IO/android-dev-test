@@ -13,11 +13,11 @@ data class PokemonDetailsEntity(
     val height: Int,
     val weight: Int,
     val imageUrl: String,
-    val types: String,
-    val abilities: String,
+    val typesAsString: String,
+    val abilitiesAsString: String,
     val baseExperience: Int,
-    val stats: String,
-    val lastUpdated: Long = System.currentTimeMillis(),
+    val statsAsString: String,
+    val lastFetchedTimestamp: Long = System.currentTimeMillis(),
 ) {
     fun toPokemonDetailsDomain(): PokemonDetails {
         return PokemonDetails(
@@ -26,10 +26,10 @@ data class PokemonDetailsEntity(
             height = height,
             weight = weight,
             imageUrl = imageUrl,
-            types = types.split(","),
-            abilities = abilities.split(","),
+            types = typesAsString.split(","),
+            abilities = abilitiesAsString.split(","),
             baseExperience = baseExperience,
-            stats = stats.split(",").associate {
+            stats = statsAsString.split(",").associate {
                 val keyValue = it.split(":")
                 keyValue[0] to keyValue[1].toInt()
             },
@@ -37,18 +37,18 @@ data class PokemonDetailsEntity(
     }
 
     companion object {
-        fun fromPokemonDetailsDomain(domain: PokemonDetails): PokemonDetailsEntity {
+        fun toEntity(pokemonDetails: PokemonDetails): PokemonDetailsEntity {
             return PokemonDetailsEntity(
-                id = domain.id,
-                name = domain.name,
-                height = domain.height,
-                weight = domain.weight,
-                imageUrl = domain.imageUrl,
-                types = domain.types.joinToString(","),
-                abilities = domain.abilities.joinToString(","),
-                baseExperience = domain.baseExperience,
-                stats = domain.stats.entries.joinToString(",") { "${it.key}:${it.value}" },
-                lastUpdated = System.currentTimeMillis(),
+                id = pokemonDetails.id,
+                name = pokemonDetails.name,
+                height = pokemonDetails.height,
+                weight = pokemonDetails.weight,
+                imageUrl = pokemonDetails.imageUrl,
+                typesAsString = pokemonDetails.types.joinToString(","),
+                abilitiesAsString = pokemonDetails.abilities.joinToString(","),
+                baseExperience = pokemonDetails.baseExperience,
+                statsAsString = pokemonDetails.stats.entries.joinToString(",") { "${it.key}:${it.value}" },
+                lastFetchedTimestamp = System.currentTimeMillis(),
             )
         }
     }
