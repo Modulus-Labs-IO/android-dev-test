@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.vancoding.pokemon.R
+import com.vancoding.pokemon.utils.show
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
@@ -31,7 +32,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     protected fun showError(message: String, errorView: View? = null) {
         if (errorView != null) {
-            errorView.visibility = View.VISIBLE
+            errorView.show()
             if (errorView is android.widget.TextView) {
                 errorView.text = getString(R.string.error_message, message)
             }
