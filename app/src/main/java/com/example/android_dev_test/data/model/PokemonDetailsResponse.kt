@@ -21,15 +21,3 @@ data class Type(
 data class TypeDetail(
     val name: String // Type name (e.g., "grass", "fire")
 )
-
-//data class PokemonDetailsResponse(
-//    val id: Int,
-//    val name: String,
-//    val height: Int,
-//    val weight: Int,
-//    val imageUrl: String,
-//    val types: List<String>,
-//    val abilities: List<String>,
-//    val baseExperience: Int,
-//    val stats: Map<String, Int>,
-//)

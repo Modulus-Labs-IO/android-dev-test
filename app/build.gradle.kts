@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.ksp)
+        id("androidx.navigation.safeargs.kotlin")
+
 }
 
 hilt {
@@ -73,7 +75,6 @@ dependencies {
     // Coroutines
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-//    testImplementation(libs.coroutines.test)
 
     // Hilt
     implementation(libs.hilt.android)

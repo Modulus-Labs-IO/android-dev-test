@@ -8,11 +8,6 @@ data class PokemonResponse(
 )
 
 data class PokemonResult(
-    val name: String, // Pokémon name
-    val url: String // URL to fetch details
+    val name: String ,
+    val url: String
 )
-//data class PokemonResponse(
-//    val id: Int,
-//    val name: String,
-//    val url: String,
-//)
