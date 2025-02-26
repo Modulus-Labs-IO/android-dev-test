@@ -12,6 +12,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import com.vancoding.pokemon.R
 import com.vancoding.pokemon.databinding.ActivityMainBinding
+import com.vancoding.pokemon.utils.hide
+import com.vancoding.pokemon.utils.show
 import com.vancoding.pokemon.viewmodel.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,12 +57,12 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.pokemonListFragment -> {
-                    binding.header.visibility = android.view.View.VISIBLE
-                    binding.appBar.visibility = android.view.View.VISIBLE
+                    binding.header.show()
+                    binding.appBar.show()
                 }
                 R.id.pokemonDetailFragment -> {
-                    binding.header.visibility = android.view.View.GONE
-                    binding.appBar.visibility = android.view.View.GONE
+                    binding.header.hide()
+                    binding.appBar.hide()
                     hideKeyboard()
                 }
             }
