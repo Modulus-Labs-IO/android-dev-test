@@ -185,11 +185,11 @@ class PokemonRepositoryImplTest {
             height = 7,
             weight = 69,
             imageUrl = "url",
-            types = "grass,poison",
-            abilities = "overgrow,chlorophyll",
+            typesAsString = "grass,poison",
+            abilitiesAsString = "overgrow,chlorophyll",
             baseExperience = 64,
-            stats = "hp:45,attack:49",
-            lastUpdated = currentTime,
+            statsAsString = "hp:45,attack:49",
+            lastFetchedTimestamp = currentTime,
         )
 
         `when`(pokemonDetailsDao.getPokemonDetails(pokemonId)).thenReturn(flowOf(cachedDetails))

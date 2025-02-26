@@ -21,11 +21,11 @@ fun PokemonDetailsResponse.toDomain(): PokemonDetails {
         name = this.name,
         height = this.height,
         weight = this.weight,
-        imageUrl = this.sprites.front_default.orEmpty(),
+        imageUrl = this.sprites.frontDefault.orEmpty(),
         types = this.types.map { it.type.name },
         abilities = this.abilities.map { it.ability.name },
-        baseExperience = this.base_experience,
-        stats = this.stats.associate { it.stat.name to it.base_stat },
+        baseExperience = this.baseExperience,
+        stats = this.stats.associate { it.stat.name to it.baseStat },
     )
 }
 
