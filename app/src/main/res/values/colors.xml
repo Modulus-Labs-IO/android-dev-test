@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="pokemon_primary">#0084FF</color>
+    <color name="pokemon_primary_dark">#0078E9</color>
+    <color name="pokemon_accent">#00C6FF</color>
+    <color name="pokemon_background">#FFFFFF</color>
+    <color name="pokemon_surface">#FFFFFF</color>
+    <color name="pokemon_card">#F2F3F5</color>
+    <color name="pokemon_on_primary">#FFFFFF</color>
+    <color name="pokemon_on_background">#050505</color>
+    <color name="pokemon_on_surface">#65676B</color>
+    <color name="pokemon_divider">#E4E6EB</color>
+    <color name="pokemon_light_gray">#EEEEEE</color>
+    <color name="pokemon_input_background">#F0F2F5</color>
+    <color name="pokemon_error">#FF3B30</color>
+    <color name="pokemon_success">#30D158</color>
+
+    <!-- Pokémon Type Colors -->
+    <color name="pokemon_type_normal">#A8A878</color>
+    <color name="pokemon_type_fire">#F08030</color>
+    <color name="pokemon_type_water">#6890F0</color>
+    <color name="pokemon_type_electric">#F8D030</color>
+    <color name="pokemon_type_grass">#78C850</color>
+    <color name="pokemon_type_ice">#98D8D8</color>
+    <color name="pokemon_type_fighting">#C03028</color>
+    <color name="pokemon_type_poison">#A040A0</color>
+    <color name="pokemon_type_ground">#E0C068</color>
+    <color name="pokemon_type_flying">#A890F0</color>
+    <color name="pokemon_type_psychic">#F85888</color>
+    <color name="pokemon_type_bug">#A8B820</color>
+    <color name="pokemon_type_rock">#B8A038</color>
+    <color name="pokemon_type_ghost">#705898</color>
+    <color name="pokemon_type_dragon">#7038F8</color>
+    <color name="pokemon_type_dark">#705848</color>
+    <color name="pokemon_type_steel">#B8B8D0</color>
+    <color name="pokemon_type_fairy">#EE99AC</color>
+
+</resources>
