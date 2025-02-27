@@ -1,4 +1,4 @@
-package com.example.android_dev_test.pokemon_testing
+package com.example.android_dev_test.pokemon_testing.data.api
 
 import com.example.android_dev_test.data.network.ApiService
 import com.example.android_dev_test.data.network.PokemonRetrofit

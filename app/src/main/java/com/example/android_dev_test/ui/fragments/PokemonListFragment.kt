@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.android_dev_test.databinding.FragmentPokemonListBinding
 import com.example.android_dev_test.ui.PokemonListState
 import com.example.android_dev_test.ui.adapter.PokemonListAdapter
@@ -89,6 +90,23 @@ class PokemonListFragment : Fragment() {
             viewModel.searchPokemon("")
             false
         }
+
+
+        //for pagination
+        binding.rvPokemon.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                if (lastVisibleItemPosition == totalItemCount - 1) {
+                    viewModel.loadPokemonList()
+                }
+            }
+        })
+
     }
 
     private fun setupAdapter() {

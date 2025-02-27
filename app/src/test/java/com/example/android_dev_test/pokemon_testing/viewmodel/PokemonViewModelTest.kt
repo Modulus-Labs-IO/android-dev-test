@@ -1,4 +1,4 @@
-package com.example.android_dev_test.pokemon_testing
+package com.example.android_dev_test.pokemon_testing.viewmodel
 
 import com.example.android_dev_test.data.model.PokemonDetailsResponse
 import com.example.android_dev_test.data.model.PokemonResponse

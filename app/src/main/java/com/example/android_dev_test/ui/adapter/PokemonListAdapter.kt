@@ -42,6 +42,7 @@ class PokemonListAdapter :
             binding.root.setOnClickListener {
                 onItemClick?.invoke(pokemon)
             }
+
         }
     }
 

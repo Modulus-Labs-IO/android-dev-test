@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,21 +26,50 @@ class PokemonViewModel @Inject constructor(
     private val _pokemonDetails = MutableStateFlow<PokemonDetailsState>(PokemonDetailsState.Loading)
     val pokemonDetails: StateFlow<PokemonDetailsState> = _pokemonDetails.asStateFlow()
 
-    // Store the full list of Pokémon
     private var fullPokemonList: List<PokemonResult> = emptyList()
 
-    // Store the current search query
     private val _searchQuery = MutableStateFlow<String?>(null)
-    val searchQuery: StateFlow<String?> = _searchQuery.asStateFlow()
 
-    fun loadPokemonList(limit: Int = 10, offset: Int = 0) {
+    //for pagination
+    private var currentOffset = 0
+    private val limit = 20
+    private var isLastPage = false
+
+    private val searchQueryFlow = MutableStateFlow("")
+
+    init {
+        viewModelScope.launch {
+            searchQueryFlow
+                .debounce(200) // Wait 200ms after the user stops typing
+                .collect { query ->
+                    _searchQuery.value = query
+                    applySearchFilter()
+                }
+        }
+    }
+
+    fun loadPokemonList() {
+        if (isLastPage) return
+
         viewModelScope.launch {
             _pokemonList.value = PokemonListState.Loading
 
             try {
-                val response = repository.getPokemonList(limit, offset)
-                fullPokemonList = response.results
-                applySearchFilter()
+                val response = repository.getPokemonList(limit, currentOffset)
+                fullPokemonList = fullPokemonList + response.results
+
+                _pokemonList.value = PokemonListState.Success(
+                    PokemonResponse(
+                        response.count,
+                        response.next,
+                        response.previous,
+                        fullPokemonList
+                    )
+                )
+
+
+                currentOffset += limit
+                isLastPage = response.next == null
             } catch (e: Exception) {
                 _pokemonList.value = PokemonListState.Error(e.message ?: "An error occurred")
             }
@@ -59,14 +89,12 @@ class PokemonViewModel @Inject constructor(
     }
 
     fun searchPokemon(query: String) {
-        _searchQuery.value = query
-        applySearchFilter()
+        searchQueryFlow.value = query
     }
 
     private fun applySearchFilter() {
         val query = _searchQuery.value
         if (query.isNullOrEmpty()) {
-            // Show the full list if there's no search query
             _pokemonList.value = PokemonListState.Success(
                 PokemonResponse(
                     fullPokemonList.size,
@@ -76,10 +104,10 @@ class PokemonViewModel @Inject constructor(
                 )
             )
         } else {
-            // Filter the list based on the search query
             val filteredList = fullPokemonList.filter { pokemon ->
                 pokemon.name.contains(query, ignoreCase = true)
-            }
+            }.take(1)
+
             _pokemonList.value = PokemonListState.Success(
                 PokemonResponse(
                     filteredList.size,
